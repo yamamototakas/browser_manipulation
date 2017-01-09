@@ -49,7 +49,45 @@ def main():
     elem = driver.find_element(By.NAME, 'pex_user_login[password]')
     elem.send_keys(obj['Credential'][0]['Password'] + Keys.RETURN)
 
+    wait.until(EC.presence_of_element_located((By.CLASS_NAME,'quiz')))
+    elem = driver.find_element(By.CLASS_NAME,'quiz')
+    elem.click()
 
+    try :
+        time.sleep(2)
+        elem = driver.find_element(By.XPATH,'/html/body/section/article/section/section/p[3]')
+
+        if(elem.text != 'また明日！'):
+            wait.until(EC.visibility_of_element_located((By.XPATH,'/html/body/section/article/section/ul/li[3]/a')))
+            elem = driver.find_element(By.XPATH,'/html/body/section/article/section/ul/li[3]/a')
+            elem.click()
+
+            time.sleep(2)
+            alert = driver.switch_to.alert
+            alert.accept()
+    except:
+        print('Error in quiz')
+
+    wait.until(EC.presence_of_element_located((By.CLASS_NAME,'pekutan')))
+    elem = driver.find_element(By.CLASS_NAME,'pekutan')
+    elem.click()
+
+    time.sleep(2)
+    wait.until(EC.visibility_of_element_located((By.XPATH,'/html/body/section/article/section/ul/li[2]/form/input[5]')))
+    elem = driver.find_element(By.XPATH,'/html/body/section/article/section/ul/li[2]/form/input[5]')
+    elem.click()
+
+    wait.until(EC.presence_of_element_located((By.CLASS_NAME,'pekutan')))
+    elem = driver.find_element(By.CLASS_NAME,'pekutan')
+    elem.click()
+
+    time.sleep(2)
+    wait.until(EC.visibility_of_element_located((By.XPATH,'/html/body/section/article/section/ul/li[2]/form/input[5]')))
+    elem = driver.find_element(By.XPATH,'/html/body/section/article/section/ul/li[2]/form/input[5]')
+    elem.click()
+
+
+    '''
     for each in keyword_list:
         print(each)
         wait.until(EC.presence_of_element_located((By.ID,'keyword')))
@@ -59,6 +97,7 @@ def main():
         for j in range(30):
             print('*', end='', flush='ture')
             time.sleep(9+random.randint(1, 4))
+    '''
 
 
     print("End of Script")
