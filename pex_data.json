@@ -1,0 +1,9 @@
+{
+  "Credential":[
+    {
+      "Email": "sample@example.com",
+      "Password": "password"
+    }
+  ],
+  "Other" : "nothing"
+}
