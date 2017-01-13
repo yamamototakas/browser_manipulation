@@ -186,7 +186,7 @@ def clickAnswer(driver, wait):
         elem.click()
         print('    clicked {0} answer in "answer page"'.format(
             numToOridnal(r)))
-        time.sleep(2)
+        time.sleep(4)
         print('End of answer')
 
     except NoSuchElementException as err:
