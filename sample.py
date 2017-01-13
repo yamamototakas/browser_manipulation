@@ -24,6 +24,14 @@ def getKeyword():
     return key_list
 
 
+def numToOridnal(n):
+    suffixes = ("th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th")
+
+    i = (n % 100)
+    j = 0 if (i > 10 and i < 20) else (n % 10)
+    return "{0}{1}".format(n, suffixes[j])
+
+
 def searchWord(driver, wait, keyword):
     try :
         print('Start of search')
@@ -31,13 +39,14 @@ def searchWord(driver, wait, keyword):
         #wait.until(EC.visibility_of_element_located((By.XPATH,'//*[@id="fixed-box"]/ul/li[6]')))
         #elem = driver.find_element(By.XPATH,'//*[@id="fixed-box"]/ul/li[6]')
         #elem.click()
-        print('    moved to search page')
+        print('    moved to "search page"')
 
         time.sleep(2)
         wait.until(EC.presence_of_element_located((By.ID,'keyword')))
         elem = driver.find_element_by_id('keyword')
         elem.send_keys(keyword + Keys.RETURN)
-        print('    and searched, End of search')
+        print('    searched by "{0}"'.format(keyword))
+        print('End of search')
 
     except:
         print('Error in search')
@@ -51,19 +60,20 @@ def clickQuiz(driver, wait):
         #wait.until(EC.visibility_of_element_located((By.XPATH,'//*[@id="fixed-box"]/ul/li[5]')))
         #elem = driver.find_element(By.XPATH,'//*[@id="fixed-box"]/ul/li[5]')
         #elem.click()
-        print('    moved to search quiz page')
+        print('    moved to "quiz page"')
 
         time.sleep(2)
         r = random.randint(1, 4)
-        wait.until(EC.visibility_of_element_located((By.XPATH,'/html/body/section/article/section/ul/li[%r]/a' % r)))
-        elem = driver.find_element(By.XPATH,'/html/body/section/article/section/ul/li[%r]/a' % r)
+        wait.until(EC.visibility_of_element_located((By.XPATH,'/html/body/section/article/section/ul/li[{0}]/a'.format(r))))
+        elem = driver.find_element(By.XPATH,'/html/body/section/article/section/ul/li[{0}]/a'.format(r))
         elem.click()
-        print('    clicked %r in quiz' % r)
+        print('    clicked {0} answer in "quize page"'.format(numToOridnal(r)))
 
         time.sleep(2)
         alert = driver.switch_to.alert
         alert.accept()
-        print('    and accepted in dialogue, End of quiz')
+        print('    accepted in dialogue')
+        print('End of quiz')
 
     except:
         print('Error in quiz')
@@ -77,14 +87,14 @@ def clickPekutan(driver, wait):
         #wait.until(EC.visibility_of_element_located((By.XPATH,'//*[@id="fixed-box"]/ul/li[8]')))
         #elem = driver.find_element(By.XPATH,'//*[@id="fixed-box"]/ul/li[8]')
         #elem.click()
-        print('    moved to pekutan page')
+        print('    moved to "pekutan page"')
 
         time.sleep(2)
         r = random.randint(1, 2)
-        wait.until(EC.visibility_of_element_located((By.XPATH,'/html/body/section/article/section/ul/li[%r]/form/input[5]' % r)))
-        elem = driver.find_element(By.XPATH,'/html/body/section/article/section/ul/li[%r]/form/input[5]' % r)
+        wait.until(EC.visibility_of_element_located((By.XPATH,'/html/body/section/article/section/ul/li[{0}]/form/input[5]'.format(r))))
+        elem = driver.find_element(By.XPATH,'/html/body/section/article/section/ul/li[{0}]/form/input[5]'.format(r))
         elem.click()
-        print('    clicked 1st word as %r' % r)
+        print('    clicked {0} item for first word'.format(numToOridnal(r)))
 
         driver.get('http://pex.jp/pekutan/words/current')
         #wait.until(EC.visibility_of_element_located((By.XPATH,'//*[@id="fixed-box"]/ul/li[8]')))
@@ -93,13 +103,15 @@ def clickPekutan(driver, wait):
 
         time.sleep(2)
         r = random.randint(1, 2)
-        wait.until(EC.visibility_of_element_located((By.XPATH,'/html/body/section/article/section/ul/li[%r]/form/input[5]' % r)))
-        elem = driver.find_element(By.XPATH,'/html/body/section/article/section/ul/li[%r]/form/input[5]' % r)
+        wait.until(EC.visibility_of_element_located((By.XPATH,'/html/body/section/article/section/ul/li[{0}]/form/input[5]'.format(r))))
+        elem = driver.find_element(By.XPATH,'/html/body/section/article/section/ul/li[{0}]/form/input[5]'.format(r))
         elem.click()
-        print('    clicked 2nd word as %r, End of pekutan' % r)
+        print('    clicked {0} item for Second word'.format(numToOridnal(r)))
+        print('End of pekutan')
     except:
         print('Error in pekutan')
     return True
+
 
 def clickSeal(driver, wait):
     try :
@@ -108,25 +120,25 @@ def clickSeal(driver, wait):
         #wait.until(EC.visibility_of_element_located((By.XPATH,'//*[@id="fixed-box"]/ul/li[8]')))
         #elem = driver.find_element(By.XPATH,'//*[@id="fixed-box"]/ul/li[8]')
         #elem.click()
-        print('    moved to seal page')
+        print('    moved to "seal page"')
 
         time.sleep(2)
         wait.until(EC.visibility_of_element_located((By.XPATH,'//*[@id="mekutte_seal"]/a')))
         elem = driver.find_element(By.XPATH,'//*[@id="mekutte_seal"]/a')
         elem.click()
 
-        print('    moved to seal inside page')
+        print('    moved to detail "seal page"')
         time.sleep(2)
         r = random.randint(1, 4)
-        wait.until(EC.visibility_of_element_located((By.XPATH,'//*[@id="serve"]/li[%r]/form/input[3]' % r)))
-        elem = driver.find_element(By.XPATH,'//*[@id="serve"]/li[%r]/form/input[3]' % r)
+        wait.until(EC.visibility_of_element_located((By.XPATH,'//*[@id="serve"]/li[{0}]/form/input[3]'.format(r))))
+        elem = driver.find_element(By.XPATH,'//*[@id="serve"]/li[{0}]/form/input[3]'.format(r))
         elem.click()
-
-
-        print('    clicked %r seal, End of seal' % r)
+        print('    clicked {0} seal'.format(numToOridnal(r)))
+        print('End of seal')
     except:
         print('Error in seal')
     return True
+
 
 def clickAnswer(driver, wait):
     try :
@@ -135,16 +147,68 @@ def clickAnswer(driver, wait):
         #wait.until(EC.visibility_of_element_located((By.XPATH,'//*[@id="fixed-box"]/ul/li[8]')))
         #elem = driver.find_element(By.XPATH,'//*[@id="fixed-box"]/ul/li[8]')
         #elem.click()
-        print('    moved to answer page')
+        print('    moved to "answer page"')
 
         time.sleep(2)
         r = random.randint(1, 2)
-        wait.until(EC.visibility_of_element_located((By.XPATH,'/html/body/section/article/section/ul/li[%r]/form' % r)))
-        elem = driver.find_element(By.XPATH,'/html/body/section/article/section/ul/li[%r]/form' % r)
+        wait.until(EC.visibility_of_element_located((By.XPATH,'/html/body/section/article/section/ul/li[{0}]/form/input[4]'.format(r))))
+        elem = driver.find_element(By.XPATH,'/html/body/section/article/section/ul/li[{0}]/form/input[4]'.format(r))
         elem.click()
-        print('    clicked %r answer, End of answer' % r)
+        print('    clicked {0} answer in "answer page"'.format(numToOridnal(r)))
+        print('End of answer')
     except:
         print('Error in answer')
+    return True
+
+
+def clickChirashi(driver, wait):
+    try :
+        print('Start of chirashi')
+        driver.get('http://pex.jp/chirashi')
+        #wait.until(EC.visibility_of_element_located((By.XPATH,'//*[@id="fixed-box"]/ul/li[8]')))
+        #elem = driver.find_element(By.XPATH,'//*[@id="fixed-box"]/ul/li[8]')
+        #elem.click()
+        print('    moved to "chirashi page"')
+
+        for i in range(1,5):
+            time.sleep(5)
+            wait.until(EC.visibility_of_element_located((By.XPATH,'/html/body/section/section[2]/ul/li[{0}]/figure/a[2]'.format(i))))
+            elem = driver.find_element(By.XPATH,'/html/body/section/section[2]/ul/li[{0}]/figure/a[2]'.format(i))
+            elem.click()
+            print('    clicked {0} ad in "chirashi page"'.format(numToOridnal(i)))
+        print('End of chirashi')
+    except:
+        print('Error in chirashi')
+    return True
+
+
+def clickNews(driver, wait):
+    try :
+        print('Start of news')
+        driver.get('http://pex.jp/point_news')
+        #wait.until(EC.visibility_of_element_located((By.XPATH,'//*[@id="fixed-box"]/ul/li[8]')))
+        #elem = driver.find_element(By.XPATH,'//*[@id="fixed-box"]/ul/li[8]')
+        #elem.click()
+        print('    moved to "news page"')
+
+        for i in range(1,6):
+            time.sleep(2)
+            wait.until(EC.visibility_of_element_located((By.XPATH,'//*[@id="news-list"]/li[{0}]/figure/a/div'.format(i))))
+            elem = driver.find_element(By.XPATH,'//*[@id="news-list"]/li[{0}]/figure/a/div'.format(i))
+            elem.click()
+            print('    clicked {0} news in "news page"'.format(numToOridnal(i)))
+
+            time.sleep(5)
+            wait.until(EC.visibility_of_element_located((By.XPATH,'//*[@id="submit-cool"]'.format(i))))
+            elem = driver.find_element(By.XPATH,'//*[@id="submit-cool"]'.format(i))
+            elem.click()
+            print('    clicked cool-icon "news page"')
+
+            driver.get('http://pex.jp/point_news')
+
+        print('End of news')
+    except:
+        print('Error in news')
     return True
 
 
@@ -181,20 +245,19 @@ def main():
     clickPekutan(driver, wait)
     clickSeal(driver, wait)
     clickAnswer(driver, wait)
+    clickChirashi(driver, wait)
+    clickNews(driver, wait)
 
 
-
-    '''
-    for each in keyword_list:
-        print(each)
-        wait.until(EC.presence_of_element_located((By.ID,'keyword')))
-        elem = driver.find_element_by_id('keyword')
-        elem.send_keys(each + Keys.RETURN)
-
+    for i in range(1,len(keyword_list)):
         for j in range(30):
             print('*', end='', flush='ture')
             time.sleep(9+random.randint(1, 4))
-    '''
+        print(" ")
+
+        searchWord(driver, wait, keyword_list[i])
+        if(i<3):
+            clickPekutan(driver, wait)
 
 
     print("End of Script")
