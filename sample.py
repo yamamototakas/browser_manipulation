@@ -52,7 +52,7 @@ def searchWord(driver, wait, keyword):
     except NoSuchElementException as err:
         print('Cannot find element: {0}'.format(err))
     except TimeoutException as err:
-        print('Cannot find element, then timeout in wating: {0}'.format(err))
+        print('Cannot find element, then timeout in waiting: {0}'.format(err))
     except Exception as err:
         print('Eception: {0}'.format(err))
     except:
@@ -87,7 +87,7 @@ def clickQuiz(driver, wait):
     except NoSuchElementException as err:
         print('Cannot find element: {0}'.format(err))
     except TimeoutException as err:
-        print('Cannot find element, then timeout in wating: {0}'.format(err))
+        print('Cannot find element, then timeout in waiting: {0}'.format(err))
     except:
         print('Error in quiz')
     return True
@@ -104,10 +104,14 @@ def clickPekutan(driver, wait):
 
         time.sleep(2)
         r = random.randint(1, 2)
+        #wait.until(EC.visibility_of_element_located(
+        #    (By.XPATH, '/html/body/section/article/section/ul/li[{0}]/form/input[5]'.format(r))))
+        #elem = driver.find_element(
+        #    By.XPATH, '/html/body/section/article/section/ul/li[{0}]/form/input[5]'.format(r))
         wait.until(EC.visibility_of_element_located(
-            (By.XPATH, '/html/body/section/article/section/ul/li[{0}]/form/input[5]'.format(r))))
+            (By.CSS_SELECTOR, 'body > section > article > section > ul > li:nth-child({0}) > form > input.btn'.format(r))))
         elem = driver.find_element(
-            By.XPATH, '/html/body/section/article/section/ul/li[{0}]/form/input[5]'.format(r))
+            By.CSS_SELECTOR, 'body > section > article > section > ul > li:nth-child({0}) > form > input.btn'.format(r))
         elem.click()
         print('    clicked {0} item for first word'.format(numToOridnal(r)))
 
@@ -118,17 +122,21 @@ def clickPekutan(driver, wait):
 
         time.sleep(2)
         r = random.randint(1, 2)
+        #wait.until(EC.visibility_of_element_located(
+        #    (By.XPATH, '/html/body/section/article/section/ul/li[{0}]/form/input[5]'.format(r))))
+        #elem = driver.find_element(
+        #    By.XPATH, '/html/body/section/article/section/ul/li[{0}]/form/input[5]'.format(r))
         wait.until(EC.visibility_of_element_located(
-            (By.XPATH, '/html/body/section/article/section/ul/li[{0}]/form/input[5]'.format(r))))
+            (By.CSS_SELECTOR, 'body > section > article > section > ul > li:nth-child({0}) > form > input.btn'.format(r))))
         elem = driver.find_element(
-            By.XPATH, '/html/body/section/article/section/ul/li[{0}]/form/input[5]'.format(r))
+            By.CSS_SELECTOR, 'body > section > article > section > ul > li:nth-child({0}) > form > input.btn'.format(r))
         elem.click()
         print('    clicked {0} item for Second word'.format(numToOridnal(r)))
         print('End of pekutan')
     except NoSuchElementException as err:
         print('Cannot find element: {0}'.format(err))
     except TimeoutException as err:
-        print('Cannot find element, then timeout in wating: {0}'.format(err))
+        print('Cannot find element, then timeout in waiting: {0}'.format(err))
     except:
         print('Error in pekutan')
     return True
@@ -152,17 +160,24 @@ def clickSeal(driver, wait):
         print('    moved to detail "seal page"')
         time.sleep(2)
         r = random.randint(1, 4)
+        #wait.until(EC.visibility_of_element_located(
+        #    (By.XPATH, '//*[@id="serve"]/li[{0}]/form/input[3]'.format(r))))
+        #elem = driver.find_element(
+        #    By.XPATH, '//*[@id="serve"]/li[{0}]/form/input[3]'.format(r))
+        #//*[@id="serve"]/li[1]/form/input[2]
+        ##serve > li:nth-child(1) > form > input.card01
+        ##serve > li:nth-child(2) > form > input.card02
         wait.until(EC.visibility_of_element_located(
-            (By.XPATH, '//*[@id="serve"]/li[{0}]/form/input[3]'.format(r))))
+            (By.CSS_SELECTOR, 'serve > li:nth-child({0}) > form > input.card0{0}'.format(r))))
         elem = driver.find_element(
-            By.XPATH, '//*[@id="serve"]/li[{0}]/form/input[3]'.format(r))
+            By.CSS_SELECTOR, 'serve > li:nth-child({0}) > form > input.card0{0}'.format(r))
         elem.click()
         print('    clicked {0} seal'.format(numToOridnal(r)))
         print('End of seal')
     except NoSuchElementException as err:
         print('Cannot find element: {0}'.format(err))
     except TimeoutException as err:
-        print('Cannot find element, then timeout in wating: {0}'.format(err))
+        print('Cannot find element, then timeout in waiting: {0}'.format(err))
     except:
         print('Error in seal')
     return True
@@ -179,10 +194,17 @@ def clickAnswer(driver, wait):
 
         time.sleep(2)
         r = random.randint(1, 2)
+        #wait.until(EC.visibility_of_element_located(
+        #    (By.XPATH, '/html/body/section/article/section/ul/li[{0}]/form/input[4]'.format(r))))
+        #elem = driver.find_element(
+        #    By.XPATH, '/html/body/section/article/section/ul/li[{0}]/form/input[4]'.format(r))
+        #/html/body/section/article/section/ul/li[1]/form/input[3]
+        #body > section > article > section > ul > li:nth-child(1) > form
+        #body > section > article > section > ul > li:nth-child(1) > form
         wait.until(EC.visibility_of_element_located(
-            (By.XPATH, '/html/body/section/article/section/ul/li[{0}]/form/input[4]'.format(r))))
+            (By.CSS_SELECTOR, 'body > section > article > section > ul > li:nth-child({0}) > form'.format(r))))
         elem = driver.find_element(
-            By.XPATH, '/html/body/section/article/section/ul/li[{0}]/form/input[4]'.format(r))
+            By.CSS_SELECTOR, 'body > section > article > section > ul > li:nth-child({0}) > form'.format(r))
         elem.click()
         print('    clicked {0} answer in "answer page"'.format(
             numToOridnal(r)))
@@ -192,7 +214,7 @@ def clickAnswer(driver, wait):
     except NoSuchElementException as err:
         print('Cannot find element: {0}'.format(err))
     except TimeoutException as err:
-        print('Cannot find element, then timeout in wating: {0}'.format(err))
+        print('Cannot find element, then timeout in waiting: {0}'.format(err))
     except:
         print('Error in answer')
     return True
@@ -221,27 +243,27 @@ def clickChirashi(driver, wait):
     except NoSuchElementException as err:
         print('Cannot find element: {0}'.format(err))
     except TimeoutException as err:
-        print('Cannot find element, then timeout in wating: {0}'.format(err))
+        print('Cannot find element, then timeout in waiting: {0}'.format(err))
     except:
         print('Error in chirashi')
     return True
 
 
 def clickNews(driver, wait):
-    try:
-        print('Start of news')
-        driver.get('http://pex.jp/point_news')
-        # wait.until(EC.visibility_of_element_located((By.XPATH,'//*[@id="fixed-box"]/ul/li[8]')))
-        #elem = driver.find_element(By.XPATH,'//*[@id="fixed-box"]/ul/li[8]')
-        # elem.click()
-        print('    moved to "news page"')
+    print('Start of news')
 
-        for i in range(1, 7):
+    for i in range(1, 7):
+        try:
+            driver.get('http://pex.jp/point_news')
+            print('    moved to "news page"')
+
             time.sleep(2)
             wait.until(EC.visibility_of_element_located(
-                (By.XPATH, '//*[@id="news-list"]/li[{0}]/figure/a/div'.format(i))))
+                (By.XPATH, '//*[@id="news-list"]/li[{0}]/figure'.format(i))))
             elem = driver.find_element(
-                By.XPATH, '//*[@id="news-list"]/li[{0}]/figure/a/div'.format(i))
+                By.XPATH, '//*[@id="news-list"]/li[{0}]/figure'.format(i))
+            #//*[@id="news-list"]/li[3]/figure
+            ##news-list > li:nth-child(3) > figure
             elem.click()
             print('    clicked {0} news in "news page"'.format(
                 numToOridnal(i)))
@@ -256,13 +278,13 @@ def clickNews(driver, wait):
 
             driver.get('http://pex.jp/point_news')
 
-        print('End of news')
-    except NoSuchElementException as err:
-        print('Cannot find element: {0}'.format(err))
-    except TimeoutException as err:
-        print('Cannot find element, then timeout in wating: {0}'.format(err))
-    except:
-        print('Error in news')
+            print('End of news')
+        except NoSuchElementException as err:
+            print('Cannot find element in {0} news: {1}'.format(numToOridnal(i),err))
+        except TimeoutException as err:
+            print('Cannot find element in {0} news, then timeout in waiting: {1}'.format(numToOridnal(i),err))
+        except:
+            print('Error in news')
     return True
 
 
