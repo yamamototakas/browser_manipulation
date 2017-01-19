@@ -104,28 +104,18 @@ def clickPekutan(driver, wait):
 
         time.sleep(2)
         r = random.randint(1, 2)
-        #wait.until(EC.visibility_of_element_located(
-        #    (By.XPATH, '/html/body/section/article/section/ul/li[{0}]/form/input[5]'.format(r))))
-        #elem = driver.find_element(
-        #    By.XPATH, '/html/body/section/article/section/ul/li[{0}]/form/input[5]'.format(r))
+
         wait.until(EC.visibility_of_element_located(
             (By.CSS_SELECTOR, 'body > section > article > section > ul > li:nth-child({0}) > form > input.btn'.format(r))))
         elem = driver.find_element(
             By.CSS_SELECTOR, 'body > section > article > section > ul > li:nth-child({0}) > form > input.btn'.format(r))
         elem.click()
         print('    clicked {0} item for first word'.format(numToOridnal(r)))
-
         driver.get('http://pex.jp/pekutan/words/current')
-        # wait.until(EC.visibility_of_element_located((By.XPATH,'//*[@id="fixed-box"]/ul/li[8]')))
-        #elem = driver.find_element(By.XPATH,'//*[@id="fixed-box"]/ul/li[8]')
-        # elem.click()
 
         time.sleep(2)
         r = random.randint(1, 2)
-        #wait.until(EC.visibility_of_element_located(
-        #    (By.XPATH, '/html/body/section/article/section/ul/li[{0}]/form/input[5]'.format(r))))
-        #elem = driver.find_element(
-        #    By.XPATH, '/html/body/section/article/section/ul/li[{0}]/form/input[5]'.format(r))
+
         wait.until(EC.visibility_of_element_located(
             (By.CSS_SELECTOR, 'body > section > article > section > ul > li:nth-child({0}) > form > input.btn'.format(r))))
         elem = driver.find_element(
@@ -145,34 +135,19 @@ def clickPekutan(driver, wait):
 def clickSeal(driver, wait):
     try:
         print('Start of seal')
-        driver.get('http://pex.jp/seal')
-        # wait.until(EC.visibility_of_element_located((By.XPATH,'//*[@id="fixed-box"]/ul/li[8]')))
-        #elem = driver.find_element(By.XPATH,'//*[@id="fixed-box"]/ul/li[8]')
-        # elem.click()
-        print('    moved to "seal page"')
+        driver.get('http://pex.jp/seal/mekutte')
+        print('    moved to "mekutte seal page"')
 
-        time.sleep(2)
-        wait.until(EC.visibility_of_element_located(
-            (By.XPATH, '//*[@id="mekutte_seal"]/a')))
-        elem = driver.find_element(By.XPATH, '//*[@id="mekutte_seal"]/a')
-        elem.click()
-
-        print('    moved to detail "seal page"')
-        time.sleep(2)
+        time.sleep(4)
         r = random.randint(1, 4)
-        #wait.until(EC.visibility_of_element_located(
-        #    (By.XPATH, '//*[@id="serve"]/li[{0}]/form/input[3]'.format(r))))
-        #elem = driver.find_element(
-        #    By.XPATH, '//*[@id="serve"]/li[{0}]/form/input[3]'.format(r))
-        #//*[@id="serve"]/li[1]/form/input[2]
-        ##serve > li:nth-child(1) > form > input.card01
-        ##serve > li:nth-child(2) > form > input.card02
+
         wait.until(EC.visibility_of_element_located(
-            (By.CSS_SELECTOR, 'serve > li:nth-child({0}) > form > input.card0{0}'.format(r))))
+            (By.CSS_SELECTOR, '#serve > li:nth-child({0}) > form > input.card0{0}'.format(r))))
         elem = driver.find_element(
-            By.CSS_SELECTOR, 'serve > li:nth-child({0}) > form > input.card0{0}'.format(r))
+            By.CSS_SELECTOR, '#serve > li:nth-child({0}) > form > input.card0{0}'.format(r))
         elem.click()
         print('    clicked {0} seal'.format(numToOridnal(r)))
+        time.sleep(4)
         print('End of seal')
     except NoSuchElementException as err:
         print('Cannot find element: {0}'.format(err))
@@ -194,13 +169,7 @@ def clickAnswer(driver, wait):
 
         time.sleep(2)
         r = random.randint(1, 2)
-        #wait.until(EC.visibility_of_element_located(
-        #    (By.XPATH, '/html/body/section/article/section/ul/li[{0}]/form/input[4]'.format(r))))
-        #elem = driver.find_element(
-        #    By.XPATH, '/html/body/section/article/section/ul/li[{0}]/form/input[4]'.format(r))
-        #/html/body/section/article/section/ul/li[1]/form/input[3]
-        #body > section > article > section > ul > li:nth-child(1) > form
-        #body > section > article > section > ul > li:nth-child(1) > form
+
         wait.until(EC.visibility_of_element_located(
             (By.CSS_SELECTOR, 'body > section > article > section > ul > li:nth-child({0}) > form'.format(r))))
         elem = driver.find_element(
@@ -258,21 +227,27 @@ def clickNews(driver, wait):
             print('    moved to "news page"')
 
             time.sleep(2)
+            #wait.until(EC.visibility_of_element_located(
+            #    (By.XPATH, '//*[@id="news-list"]/li[{0}]/figure'.format(i))))
+            #elem = driver.find_element(
+            #    By.XPATH, '//*[@id="news-list"]/li[{0}]/figure'.format(i))
             wait.until(EC.visibility_of_element_located(
-                (By.XPATH, '//*[@id="news-list"]/li[{0}]/figure'.format(i))))
+                (By.CSS_SELECTOR, '#news-list > li:nth-child({0}) > figure'.format(i))))
             elem = driver.find_element(
-                By.XPATH, '//*[@id="news-list"]/li[{0}]/figure'.format(i))
-            #//*[@id="news-list"]/li[3]/figure
-            ##news-list > li:nth-child(3) > figure
+                By.CSS_SELECTOR, '#news-list > li:nth-child({0}) > figure'.format(i))
             elem.click()
             print('    clicked {0} news in "news page"'.format(
                 numToOridnal(i)))
 
             time.sleep(5)
+            #wait.until(EC.visibility_of_element_located(
+            #    (By.XPATH, '//*[@id="submit-cool"]'.format(i))))
+            #elem = driver.find_element(
+            #    By.XPATH, '//*[@id="submit-cool"]'.format(i))
             wait.until(EC.visibility_of_element_located(
-                (By.XPATH, '//*[@id="submit-cool"]'.format(i))))
+                (By.ID, 'submit-cool'.format(i))))
             elem = driver.find_element(
-                By.XPATH, '//*[@id="submit-cool"]'.format(i))
+                By.ID, 'submit-cool'.format(i))
             elem.click()
             print('    clicked cool-icon "news page"')
 
