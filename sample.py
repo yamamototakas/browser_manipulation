@@ -1,9 +1,12 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 import urllib
 import http.cookiejar
 import socket
 import random
 import codecs
 import time
+import re
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -157,14 +160,106 @@ def clickSeal(driver, wait):
         print('Error in seal')
     return True
 
+def hintCheck(words):
+    mapping = {
+        "free": "http://pex.jp/point_actions/list/free_register",
+        "campaign": "http://pex.jp/point_actions/list/campaign",
+        "カード発行": "http://pex.jp/point_actions/list/card",
+        "account": "http://pex.jp/point_actions/list/open_account",
+        "document": "http://pex.jp/point_actions/list/document_request",
+        "assess": "http://pex.jp/point_actions/list/assessment",
+        "consult": "http://pex.jp/point_actions/list/consultation",
+        "game": "http://pex.jp/point_actions/list/start_up_game",
+        "有料会員登録": "http://pex.jp/point_actions/list/register_and_action",
+        "purchase": "http://pex.jp/point_actions/list/used_item_purchase",
+        "free-other": "http://pex.jp/point_actions/list/free_point_action_other",
+        "charge": "http://pex.jp/point_actions/list/charge_register",
+        "travel": "http://pex.jp/point_actions/list/travel",
+        "esthe": "http://pex.jp/point_actions/list/esthetic",
+        "visit": "http://pex.jp/point_actions/list/visit_store",
+        "contract": "http://pex.jp/point_actions/list/agree_contract",
+        "water": "http://pex.jp/point_actions/list/water_server",
+        "サービス利用その他": "http://pex.jp/point_actions/list/charge_point_action_other"
+    }
+    temp_words = '【獲得条件 : 有料会員登録 】の2,200Pの広告のページ'
+    temp_words2 = '【獲得条件 : サービス利用その他 】の15,000Pの広告のページ'
+
+    key = ':\s(.+)\s\D+([0-9,]+)\D+'
+    r = re.compile(key)
+    result = r.findall(words)
+    '''
+    result = r.findall(temp_words)
+    print ("2nd result", result)
+    print (mapping[result[0][0]])
+    '''
+    end = {}
+    if result:
+        end["url"] = mapping[result[0][0]] + '?sort=point_desc'
+        end["point"] = result[0][1]
+    print(end)
+
+    return end
+
+
+
+
+def clickLookingforSeal(driver, wait):
+    try:
+        print('Start of looking for seal')
+        driver.get('http://pex.jp/seal/mitsukete')
+        print('    moved to "Looking for seal page"')
+
+        time.sleep(4)
+        wait.until(EC.visibility_of_element_located(
+            (By.CLASS_NAME, 'h-lv2')))
+        elem = driver.find_element(
+            By.CLASS_NAME, 'h-lv2')
+        words = elem.text
+        print('extracted text = ', words)
+
+        info = hintCheck(words)
+        driver.get(info["url"])
+        print('    moved to "{0}"'.format(info["url"]))
+        time.sleep(4)
+        wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'text_area')))
+
+        max_num = driver.find_element(By.CLASS_NAME, 'number').text
+        page = int(max_num/20)+1
+        isFound = False
+        for i in range(1,page):
+            print("    {0} page for searching".format(numToOridnal(i)))
+            nelem = driver.find_elements(By.CLASS_NAME, 'up_p')
+            for each in nelem:
+                if (each.text == info["point"]):
+                    elem.click()
+                    time.sleep(3)
+                    hiyoko = driver.find_elements(By.CLASS_NAME, 'hiyoko')
+                    if (hiyoko):
+                        hiyoko[0].click()
+                        time.sleep(3)
+                        hiyoko = driver.find_element(By.ID, 'find')
+                        hiyoko.click()
+                        time.sleep(3)
+                        isFound = True
+                        break
+            if (isFound):
+                break
+
+
+
+    except NoSuchElementException as err:
+        print('Cannot find element: {0}'.format(err))
+    except TimeoutException as err:
+        print('Cannot find element, then timeout in waiting: {0}'.format(err))
+    except:
+        print('Error in looking for seal')
+    print('End of looking for seal')
+    return True
 
 def clickAnswer(driver, wait):
     try:
         print('Start of answer')
         driver.get('http://pex.jp/minna_no_answer/questions/current')
-        # wait.until(EC.visibility_of_element_located((By.XPATH,'//*[@id="fixed-box"]/ul/li[8]')))
-        #elem = driver.find_element(By.XPATH,'//*[@id="fixed-box"]/ul/li[8]')
-        # elem.click()
         print('    moved to "answer page"')
 
         time.sleep(2)
@@ -227,39 +322,29 @@ def clickNews(driver, wait):
             print('    moved to "news page"')
 
             time.sleep(2)
-            #wait.until(EC.visibility_of_element_located(
-            #    (By.XPATH, '//*[@id="news-list"]/li[{0}]/figure'.format(i))))
-            #elem = driver.find_element(
-            #    By.XPATH, '//*[@id="news-list"]/li[{0}]/figure'.format(i))
             wait.until(EC.visibility_of_element_located(
                 (By.CSS_SELECTOR, '#news-list > li:nth-child({0}) > figure'.format(i))))
             elem = driver.find_element(
                 By.CSS_SELECTOR, '#news-list > li:nth-child({0}) > figure'.format(i))
             elem.click()
-            print('    clicked {0} news in "news page"'.format(
-                numToOridnal(i)))
+            print('    clicked {0} news in "news page"'.format(numToOridnal(i)))
 
             time.sleep(5)
-            #wait.until(EC.visibility_of_element_located(
-            #    (By.XPATH, '//*[@id="submit-cool"]'.format(i))))
-            #elem = driver.find_element(
-            #    By.XPATH, '//*[@id="submit-cool"]'.format(i))
             wait.until(EC.visibility_of_element_located(
                 (By.ID, 'submit-cool'.format(i))))
             elem = driver.find_element(
                 By.ID, 'submit-cool'.format(i))
             elem.click()
             print('    clicked cool-icon "news page"')
+            time.sleep(3)
 
-            driver.get('http://pex.jp/point_news')
-
-            print('End of news')
         except NoSuchElementException as err:
             print('Cannot find element in {0} news: {1}'.format(numToOridnal(i),err))
         except TimeoutException as err:
             print('Cannot find element in {0} news, then timeout in waiting: {1}'.format(numToOridnal(i),err))
         except:
             print('Error in news')
+    print('End of news')
     return True
 
 
@@ -270,18 +355,17 @@ def main():
     with open('pex_data.json', 'r') as f:
         obj = json.load(f)
 
+    hintCheck('https://pex.jp/login')
+
     driver = webdriver.Firefox()
     driver.implicitly_wait(1)
     wait = WebDriverWait(driver, 8)
 
     try:
-
         driver.get('https://pex.jp/login')
         #assert 'ログイン | ポイント交換のPeX' in driver.title
-
         elem = driver.find_element(By.NAME, 'pex_user_login[email]')
         elem.send_keys(obj['Credential'][0]['Email'])
-
         elem = driver.find_element(By.NAME, 'pex_user_login[password]')
         elem.send_keys(obj['Credential'][0]['Password'] + Keys.RETURN)
 
@@ -294,6 +378,8 @@ def main():
         clickAnswer(driver, wait)
         clickChirashi(driver, wait)
         clickNews(driver, wait)
+        clickLookingforSeal(driver, wait)
+
 
         for i in range(1, len(keyword_list)):
             for j in range(30):
