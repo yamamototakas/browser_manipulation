@@ -89,6 +89,6 @@ ENV/
 .ropeproject
 
 # Data
-.json
+*.json
 keywordlist.dat
-.pkl
+*.pkl
