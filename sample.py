@@ -1,26 +1,29 @@
-import urllib
-import http.cookiejar
-import socket
-import random
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 import codecs
-import time
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import TimeoutException
+import copy
+import http.cookiejar
 import json
+import pickle
+import random
+import re
+import socket
+import time
+import urllib
+from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
-
-def getKeyword():
+def getKeyword(num):
     key_list = []
     #f = codecs.open("C:\\Users\\t_yamamoto\\Documents\\workspace\\RakutenSearch\\src\\keywordlist3.dat", 'r', 'utf-8')
     with codecs.open('keywordlist.dat', 'r', 'utf-8') as f:
         lines = f.readlines()
 
-    for i in range(6):
+    for i in range(num):
         r = random.randint(0, len(lines) - 1)
         key_list.append(lines[r].rstrip("\r\n"))
     return key_list
@@ -38,9 +41,6 @@ def searchWord(driver, wait, keyword):
     try:
         print('Start of search')
         driver.get('http://pex.jp/search/index')
-        # wait.until(EC.visibility_of_element_located((By.XPATH,'//*[@id="fixed-box"]/ul/li[6]')))
-        #elem = driver.find_element(By.XPATH,'//*[@id="fixed-box"]/ul/li[6]')
-        # elem.click()
         print('    moved to "search page"')
 
         time.sleep(2)
@@ -49,6 +49,7 @@ def searchWord(driver, wait, keyword):
         elem.send_keys(keyword + Keys.RETURN)
         print('    searched by "{0}"'.format(keyword))
         print('End of search')
+
     except NoSuchElementException as err:
         print('Cannot find element: {0}'.format(err))
     except TimeoutException as err:
@@ -64,9 +65,6 @@ def clickQuiz(driver, wait):
     try:
         print('Start of quiz')
         driver.get('http://pex.jp/point_quiz')
-        # wait.until(EC.visibility_of_element_located((By.XPATH,'//*[@id="fixed-box"]/ul/li[5]')))
-        #elem = driver.find_element(By.XPATH,'//*[@id="fixed-box"]/ul/li[5]')
-        # elem.click()
         print('    moved to "quiz page"')
 
         time.sleep(2)
@@ -78,11 +76,11 @@ def clickQuiz(driver, wait):
         elem.click()
         print('    clicked {0} answer in "quize page"'.format(numToOridnal(r)))
 
-        time.sleep(2)
+        time.sleep(3)
         alert = driver.switch_to.alert
         alert.accept()
         print('    accepted in dialogue')
-        time.sleep(2)
+        time.sleep(3)
         print('End of quiz')
     except NoSuchElementException as err:
         print('Cannot find element: {0}'.format(err))
@@ -97,9 +95,6 @@ def clickPekutan(driver, wait):
     try:
         print('Start of pekutan')
         driver.get('http://pex.jp/pekutan/words/current')
-        # wait.until(EC.visibility_of_element_located((By.XPATH,'//*[@id="fixed-box"]/ul/li[8]')))
-        #elem = driver.find_element(By.XPATH,'//*[@id="fixed-box"]/ul/li[8]')
-        # elem.click()
         print('    moved to "pekutan page"')
 
         time.sleep(2)
@@ -113,7 +108,7 @@ def clickPekutan(driver, wait):
         print('    clicked {0} item for first word'.format(numToOridnal(r)))
         driver.get('http://pex.jp/pekutan/words/current')
 
-        time.sleep(2)
+        time.sleep(4)
         r = random.randint(1, 2)
 
         wait.until(EC.visibility_of_element_located(
@@ -158,13 +153,146 @@ def clickSeal(driver, wait):
     return True
 
 
+def hintCheck(words):
+    mapping = {
+        "無料会員登録": "http://pex.jp/point_actions/list/free_register",
+        "キャンペーン応募": "http://pex.jp/point_actions/list/campaign",
+        "カード発行": "http://pex.jp/point_actions/list/card",
+        "account": "http://pex.jp/point_actions/list/open_account",
+        "document": "http://pex.jp/point_actions/list/document_request",
+        "assess": "http://pex.jp/point_actions/list/assessment",
+        "consult": "http://pex.jp/point_actions/list/consultation",
+        "game": "http://pex.jp/point_actions/list/start_up_game",
+        "有料会員登録": "http://pex.jp/point_actions/list/register_and_action",
+        "purchase": "http://pex.jp/point_actions/list/used_item_purchase",
+        "free-other": "http://pex.jp/point_actions/list/free_point_action_other",
+        "charge": "http://pex.jp/point_actions/list/charge_register",
+        "旅行": "http://pex.jp/point_actions/list/travel",
+        "esthe": "http://pex.jp/point_actions/list/esthetic",
+        "visit": "http://pex.jp/point_actions/list/visit_store",
+        "contract": "http://pex.jp/point_actions/list/agree_contract",
+        "water": "http://pex.jp/point_actions/list/water_server",
+        "サービス利用その他": "http://pex.jp/point_actions/list/charge_point_action_other"
+    }
+    temp_words = '【獲得条件 : 有料会員登録 】の2,200Pの広告のページ'
+    temp_words2 = '【獲得条件 : サービス利用その他 】の15,000Pの広告のページ'
+
+    key = ':\s(.+)\s\D+([0-9,]+)\D+'
+    r = re.compile(key)
+    result = r.findall(words)
+    '''
+    result = r.findall(temp_words)
+    print ("2nd result", result)
+    print (mapping[result[0][0]])
+    '''
+    end = {}
+    if result:
+        end["url"] = mapping[result[0][0]]
+        end["point"] = result[0][1]
+    print(end)
+
+    return end
+
+
+def clickLookingforSeal(driver, wait):
+    try:
+        print('Start of looking for seal')
+        driver.get('http://pex.jp/seal/mitsukete')
+        print('    moved to "Looking for seal page"')
+
+        time.sleep(4)
+        wait.until(EC.visibility_of_element_located(
+            (By.CLASS_NAME, 'h-lv2')))
+        elem = driver.find_element(
+            By.CLASS_NAME, 'h-lv2')
+        words = elem.text
+        print('    extracted text = ', words)
+
+        info = hintCheck(words)
+        driver.get(info["url"])
+        print('    moved to "{0}"'.format(info["url"]))
+
+        time.sleep(4)
+        wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'text_area')))
+        max_text = driver.find_element(By.CLASS_NAME, 'number').text
+        max_num = re.findall('[0-9]+', max_text)[0]
+        page = int(max_num) // 20 + 1
+        print('    # of pages:', page, ', # of items:', max_num)
+        isFound = False
+        isClicked = False
+
+        for i in range(1, page + 1):
+            currentPage = str(i)
+            currentUrl = info['url'] + '?page=' + currentPage + '&sort=point_desc'
+            driver.get(currentUrl)
+            print("        {0} page for searching".format(numToOridnal(i)))
+
+            time.sleep(4)
+            wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'text_area')))
+            nelem = driver.find_elements(By.CLASS_NAME, 'up_p')
+            selem = driver.find_element(
+                By.CLASS_NAME, 'service_list').find_elements(By.TAG_NAME, 'a')
+
+            url_list = []
+
+            for j, each in enumerate(nelem):
+                if (each.text == info["point"]):
+                    url_list.append(selem[j].get_attribute('href'))
+            if(url_list):
+                print("    URLs with same proint", url_list)
+
+            for each_url in url_list:
+                driver.get(each_url)
+                time.sleep(6)
+                hiyoko = driver.find_elements(By.CLASS_NAME, 'hiyoko')
+                if (hiyoko):
+                    isFound = True
+                    hiyoko[0].click()
+                    time.sleep(3)
+
+                    wait.until(
+                        EC.visibility_of_element_located((By.ID, 'find')))
+                    hiyoko = driver.find_element(By.ID, 'find')
+                    hiyoko.click()
+                    time.sleep(3)
+
+                    wait.until(EC.visibility_of_element_located(
+                        (By.CLASS_NAME, 'card01')))
+                    hiyoko = driver.find_element(By.CLASS_NAME, 'card01')
+                    hiyoko.click()
+                    time.sleep(3)
+
+                    isClicked = True
+                    break
+                else:
+                    pass
+
+            if (isFound):
+                break
+            else:
+                time.sleep(3)
+
+        if(isFound and isClicked):
+            print('    Found and Clicked')
+        elif(isFound):
+            print("    Found, but couldn't clicked")
+        else:
+            print('    Not found')
+
+    except NoSuchElementException as err:
+        print('Cannot find element: {0}'.format(err))
+    except TimeoutException as err:
+        print('Cannot find element, then timeout in waiting: {0}'.format(err))
+    except:
+        print('Error in looking for seal')
+    print('End of looking for seal')
+    return True
+
+
 def clickAnswer(driver, wait):
     try:
         print('Start of answer')
         driver.get('http://pex.jp/minna_no_answer/questions/current')
-        # wait.until(EC.visibility_of_element_located((By.XPATH,'//*[@id="fixed-box"]/ul/li[8]')))
-        #elem = driver.find_element(By.XPATH,'//*[@id="fixed-box"]/ul/li[8]')
-        # elem.click()
         print('    moved to "answer page"')
 
         time.sleep(2)
@@ -193,9 +321,6 @@ def clickChirashi(driver, wait):
     try:
         print('Start of chirashi')
         driver.get('http://pex.jp/chirashi')
-        # wait.until(EC.visibility_of_element_located((By.XPATH,'//*[@id="fixed-box"]/ul/li[8]')))
-        #elem = driver.find_element(By.XPATH,'//*[@id="fixed-box"]/ul/li[8]')
-        # elem.click()
         print('    moved to "chirashi page"')
         time.sleep(5)
 
@@ -227,10 +352,6 @@ def clickNews(driver, wait):
             print('    moved to "news page"')
 
             time.sleep(2)
-            #wait.until(EC.visibility_of_element_located(
-            #    (By.XPATH, '//*[@id="news-list"]/li[{0}]/figure'.format(i))))
-            #elem = driver.find_element(
-            #    By.XPATH, '//*[@id="news-list"]/li[{0}]/figure'.format(i))
             wait.until(EC.visibility_of_element_located(
                 (By.CSS_SELECTOR, '#news-list > li:nth-child({0}) > figure'.format(i))))
             elem = driver.find_element(
@@ -240,73 +361,76 @@ def clickNews(driver, wait):
                 numToOridnal(i)))
 
             time.sleep(5)
-            #wait.until(EC.visibility_of_element_located(
-            #    (By.XPATH, '//*[@id="submit-cool"]'.format(i))))
-            #elem = driver.find_element(
-            #    By.XPATH, '//*[@id="submit-cool"]'.format(i))
             wait.until(EC.visibility_of_element_located(
                 (By.ID, 'submit-cool'.format(i))))
             elem = driver.find_element(
                 By.ID, 'submit-cool'.format(i))
             elem.click()
             print('    clicked cool-icon "news page"')
+            time.sleep(3)
 
-            driver.get('http://pex.jp/point_news')
-
-            print('End of news')
         except NoSuchElementException as err:
-            print('Cannot find element in {0} news: {1}'.format(numToOridnal(i),err))
+            print('Cannot find element in {0} news: {1}'.format(
+                numToOridnal(i), err))
         except TimeoutException as err:
-            print('Cannot find element in {0} news, then timeout in waiting: {1}'.format(numToOridnal(i),err))
+            print('Cannot find element in {0} news, then timeout in waiting: {1}'.format(
+                numToOridnal(i), err))
         except:
             print('Error in news')
+    print('End of news')
     return True
 
 
 def main():
-    keyword_list = getKeyword()
+    key_num = 6
+    keyword_list = getKeyword(key_num)
     print(keyword_list)
 
     with open('pex_data.json', 'r') as f:
         obj = json.load(f)
 
+    ffprofile = webdriver.FirefoxProfile(
+        'C:/Users/t_yamamoto/AppData/Roaming/Mozilla/Firefox/Profiles/1nmlgd65.default')
+    #driver = webdriver.Firefox(firefox_profile=ffprofile)
     driver = webdriver.Firefox()
     driver.implicitly_wait(1)
     wait = WebDriverWait(driver, 8)
 
-    try:
+    url = 'https://pex.jp/login'
+    driver.get(url)
 
-        driver.get('https://pex.jp/login')
-        #assert 'ログイン | ポイント交換のPeX' in driver.title
-
+    if(driver.current_url == url):
+        print("Not logged in")
         elem = driver.find_element(By.NAME, 'pex_user_login[email]')
         elem.send_keys(obj['Credential'][0]['Email'])
-
         elem = driver.find_element(By.NAME, 'pex_user_login[password]')
         elem.send_keys(obj['Credential'][0]['Password'] + Keys.RETURN)
-
         time.sleep(5)
+    else:
+        print("Successfully logged in automatically")
 
-        searchWord(driver, wait, keyword_list[0])
-        clickQuiz(driver, wait)
-        clickPekutan(driver, wait)
-        clickSeal(driver, wait)
-        clickAnswer(driver, wait)
-        clickChirashi(driver, wait)
-        clickNews(driver, wait)
+    searchWord(driver, wait, keyword_list[0])
 
-        for i in range(1, len(keyword_list)):
-            for j in range(30):
-                print('*', end='', flush='ture')
-                time.sleep(9 + random.randint(1, 4))
-            print(" ")
+    clickQuiz(driver, wait)
+    clickPekutan(driver, wait)
+    clickSeal(driver, wait)
+    clickAnswer(driver, wait)
+    clickChirashi(driver, wait)
+    clickNews(driver, wait)
+    clickLookingforSeal(driver, wait)
 
-            searchWord(driver, wait, keyword_list[i])
-            if(i < 3):
-                clickPekutan(driver, wait)
+    for i in range(1, key_num):
+        for j in range(30):
+            print('*', end='', flush='ture')
+            time.sleep(9 + random.randint(1, 4))
+        print(" ")
 
-    except:
-        print('Unexpected error in Main')
+        searchWord(driver, wait, keyword_list[i])
+        if(i <= 6):
+            clickPekutan(driver, wait)
+            clickLookingforSeal(driver, wait)
+        else:
+            pass
 
     print("End of Script")
 
