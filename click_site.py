@@ -37,6 +37,9 @@ if __name__ == '__main__':
 
     req_session = requests.session()
     cj = browser_cookie3.load()
+    #cj = browser_cookie3.firefox()
+    #cj = browser_cookie3.chrome()
+    print (cj)
 
     for each_url in URL_LIST:
         print(each_url)
