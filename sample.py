@@ -239,7 +239,7 @@ def clickLookingforSeal(driver, wait):
                 if (each.text == info["point"]):
                     url_list.append(selem[j].get_attribute('href'))
             if(url_list):
-                print("    URLs with same proint", url_list)
+                print("    URLs with same point", url_list)
 
             for each_url in url_list:
                 driver.get(each_url)
@@ -389,7 +389,7 @@ def main():
     with open('pex_data.json', 'r') as f:
         obj = json.load(f)
 
-    #ffprofile = webdriver.FirefoxProfile('Userprofile/1nmlgd65.default')
+    #ffprofile = webdriver.FirefoxProfile('Usserprofile/1nmlgd65.default')
     #driver = webdriver.Firefox(firefox_profile=ffprofile)
     driver = webdriver.Firefox()
     driver.implicitly_wait(1)
