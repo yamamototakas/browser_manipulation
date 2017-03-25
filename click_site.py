@@ -1,20 +1,13 @@
-#! C:\bin\Python34\python.exe
 # -*- coding: utf-8 -*-
 
-'''
-First released on 06 Sept, 2014
-Modified on Feb 18, 2016
-
-@author: tyama
-'''
-
 import random
-import time
 import re
-import requests
-import browser_cookie3
+import sys
+import time
+from subprocess import CalledProcessError, check_call
 
-from subprocess import check_call
+import browser_cookie3
+import requests
 
 HEADERS = {"Connection": "keep-alive",
            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
@@ -27,17 +20,19 @@ HEADERS = {"Connection": "keep-alive",
 URL_LIST = (
     'http://hapitas.jp/index/ajaxclickget',
     # 'http://goolge.com',
-    )
+)
+
 
 def get_title(html):
     return re.findall('<title>(.*?)</title>', html, flags=re.DOTALL)[0].strip()
 
-if __name__ == '__main__':
+
+def main():
     print(URL_LIST)
 
     req_session = requests.session()
-    cj = browser_cookie3.load()
-    #cj = browser_cookie3.firefox()
+    #cj = browser_cookie3.load()
+    cj = browser_cookie3.firefox()
     #cj = browser_cookie3.chrome()
     #print (cj)
 
@@ -98,14 +93,26 @@ if __name__ == '__main__':
                 page4 = req_session.get(each, headers=HEADERS, cookies=cj)
             except:
                 print("--------------------------------------------")
-                print("Error happens in get the page")
+                print(" Error happens in sending GET to the following page")
+                print("URL = ", each)
                 print("--------------------------------------------")
-                #print traceback.format_exc(sys.exc_info()[2])
+                # print traceback.format_exc(sys.exc_info()[2])
             finally:
-                time.sleep(random.randint(1, 2)+random.randint(0, 1))
+                time.sleep(random.randint(1, 2) + random.randint(0, 1))
 
-    check_call(["C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
-                " --disable-images", "http://hapitas.jp/"])
+    #check_call(["C:\Program Files (x86)\Google\Chrome\Application\chrome.exe", " --disable-images", "http://hapitas.jp/"])
+
+    try:
+        check_call(
+            ["C:/Program Files (x86)/Mozilla Firefox/firefox.exe", " http://hapitas.jp/"])
+    except CalledProcessError as err:
+        pass
+    except Exception as err:
+        print("ERROR: ", sys.exc_info())
 
     print('ENDENDEND')
     time.sleep(5)
+
+
+if __name__ == '__main__':
+    main()
