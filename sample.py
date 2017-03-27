@@ -217,7 +217,8 @@ def clickLookingforSeal(driver, wait):
         print('    moved to "{0}"'.format(info["url"]))
 
         time.sleep(4)
-        wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'text_area')))
+        wait.until(EC.visibility_of_element_located(
+            (By.CLASS_NAME, 'text_area')))
         max_text = driver.find_element(By.CLASS_NAME, 'number').text
         max_num = re.findall('[0-9]+', max_text)[0]
         page = int(max_num) // 20 + 1
@@ -227,12 +228,14 @@ def clickLookingforSeal(driver, wait):
 
         for i in range(1, page + 1):
             currentPage = str(i)
-            currentUrl = info['url'] + '?page=' + currentPage + '&sort=point_desc'
+            currentUrl = info['url'] + '?page=' + \
+                currentPage + '&sort=point_desc'
             driver.get(currentUrl)
             print("        {0} page for searching".format(numToOridnal(i)))
 
             time.sleep(4)
-            wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'text_area')))
+            wait.until(EC.visibility_of_element_located(
+                (By.CLASS_NAME, 'text_area')))
             nelem = driver.find_elements(By.CLASS_NAME, 'up_p')
             selem = driver.find_element(
                 By.CLASS_NAME, 'service_list').find_elements(By.TAG_NAME, 'a')
