@@ -1,5 +1,5 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
+
 import codecs
 import copy
 import http.cookiejar
@@ -16,6 +16,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+
 
 def getKeyword(num):
     key_list = []
@@ -165,7 +166,7 @@ def hintCheck(words):
         "ゲーム起動": "http://pex.jp/point_actions/list/start_up_game",
         "有料会員登録": "http://pex.jp/point_actions/list/register_and_action",
         "中古買取": "http://pex.jp/point_actions/list/used_item_purchase",
-        "その他": "http://pex.jp/point_actions/list/free_point_action_other",
+        "無料その他": "http://pex.jp/point_actions/list/free_point_action_other",
         "有料会員登録": "http://pex.jp/point_actions/list/charge_register",
         "旅行": "http://pex.jp/point_actions/list/travel",
         "エステ体験": "http://pex.jp/point_actions/list/esthetic",
@@ -180,16 +181,14 @@ def hintCheck(words):
     key = ':\s(.+)\s\D+([0-9,]+)\D+'
     r = re.compile(key)
     result = r.findall(words)
-    '''
-    result = r.findall(temp_words)
-    print ("2nd result", result)
-    print (mapping[result[0][0]])
-    '''
     end = {}
-    if result:
-        end["url"] = mapping[result[0][0]]
-        end["point"] = result[0][1]
-    print(end)
+    try:
+        if result:
+            end["url"] = mapping[result[0][0]]
+            end["point"] = result[0][1]
+        print(end)
+    except:
+        print("ERROR in word mappings: ", sys.exc_info())
 
     return end
 
@@ -207,6 +206,11 @@ def clickLookingforSeal(driver, wait):
             By.CLASS_NAME, 'h-lv2')
         words = elem.text
         print('    extracted text = ', words)
+
+        if(words == "シール獲得状況"):
+            print("    Already clicked today")
+            print('End of looking for seal')
+            return True
 
         info = hintCheck(words)
         driver.get(info["url"])
