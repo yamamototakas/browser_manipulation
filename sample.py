@@ -433,7 +433,7 @@ def main():
         # for j in range(20):
         #     print('*', end='', flush='ture')
         #     time.sleep(15 + random.randint(0, 5))
-        print("Waiting for next trial")
+        print("< Waiting for next trial >")
         width = 40
         for j in range(width+1):
             progress = 1.0 * j / width
