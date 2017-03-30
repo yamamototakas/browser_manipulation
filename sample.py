@@ -37,6 +37,10 @@ def numToOridnal(n):
     j = 0 if (i > 10 and i < 20) else (n % 10)
     return "{0}{1}".format(n, suffixes[j])
 
+def get_progressbar_str(max_len, progress):
+    status = int(max_len * progress)
+    space = max_len - status
+    return ('[' + '=' * status + ' ' * space + '] %.1f%%' % (progress * 100.))
 
 def searchWord(driver, wait, keyword):
     try:
@@ -426,9 +430,15 @@ def main():
     clickLookingforSeal(driver, wait)
 
     for i in range(1, key_num):
-        for j in range(30):
-            print('*', end='', flush='ture')
-            time.sleep(9 + random.randint(1, 4))
+        # for j in range(20):
+        #     print('*', end='', flush='ture')
+        #     time.sleep(15 + random.randint(0, 5))
+        print("Waiting for next trial")
+        width = 40
+        for j in range(width+1):
+            progress = 1.0 * j / width
+            print('\r', get_progressbar_str(width, progress), end='', flush='ture')
+            time.sleep(random.randint(8, 10))
         print(" ")
 
         searchWord(driver, wait, keyword_list[i])
