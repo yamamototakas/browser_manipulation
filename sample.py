@@ -8,6 +8,7 @@ import pickle
 import random
 import re
 import socket
+import sys
 import time
 import urllib
 from selenium import webdriver
@@ -20,7 +21,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 def getKeyword(num):
     key_list = []
-    #f = codecs.open("C:\\Users\\t_yamamoto\\Documents\\workspace\\RakutenSearch\\src\\keywordlist3.dat", 'r', 'utf-8')
     with codecs.open('keywordlist.dat', 'r', 'utf-8') as f:
         lines = f.readlines()
 
@@ -37,10 +37,12 @@ def numToOridnal(n):
     j = 0 if (i > 10 and i < 20) else (n % 10)
     return "{0}{1}".format(n, suffixes[j])
 
+
 def get_progressbar_str(max_len, progress):
     status = int(max_len * progress)
     space = max_len - status
     return ('[' + '=' * status + ' ' * space + '] %.1f%%' % (progress * 100.))
+
 
 def searchWord(driver, wait, keyword):
     try:
@@ -61,8 +63,9 @@ def searchWord(driver, wait, keyword):
         print('Cannot find element, then timeout in waiting: {0}'.format(err))
     except Exception as err:
         print('Eception: {0}'.format(err))
-    except:
-        print('Error in search')
+    except Exception as err:
+        print("ERROR in [serach]: ", sys.exc_info())
+
     return True
 
 
@@ -91,8 +94,8 @@ def clickQuiz(driver, wait):
         print('Cannot find element: {0}'.format(err))
     except TimeoutException as err:
         print('Cannot find element, then timeout in waiting: {0}'.format(err))
-    except:
-        print('Error in quiz')
+    except Exception as err:
+        print("ERROR in [quiz]: ", sys.exc_info())
     return True
 
 
@@ -106,9 +109,11 @@ def clickPekutan(driver, wait):
         r = random.randint(1, 2)
 
         wait.until(EC.visibility_of_element_located(
-            (By.CSS_SELECTOR, 'body > section > article > section > ul > li:nth-child({0}) > form > input.btn'.format(r))))
+            (By.CSS_SELECTOR, 'body > section > article > section > ul \
+                                    > li:nth-child({0}) > form > input.btn'.format(r))))
         elem = driver.find_element(
-            By.CSS_SELECTOR, 'body > section > article > section > ul > li:nth-child({0}) > form > input.btn'.format(r))
+            By.CSS_SELECTOR, 'body > section > article > section > ul \
+                                   > li:nth-child({0}) > form > input.btn'.format(r))
         elem.click()
         print('    clicked {0} item for first word'.format(numToOridnal(r)))
         driver.get('http://pex.jp/pekutan/words/current')
@@ -117,9 +122,11 @@ def clickPekutan(driver, wait):
         r = random.randint(1, 2)
 
         wait.until(EC.visibility_of_element_located(
-            (By.CSS_SELECTOR, 'body > section > article > section > ul > li:nth-child({0}) > form > input.btn'.format(r))))
+            (By.CSS_SELECTOR, 'body > section > article > section > ul\
+                                    > li:nth-child({0}) > form > input.btn'.format(r))))
         elem = driver.find_element(
-            By.CSS_SELECTOR, 'body > section > article > section > ul > li:nth-child({0}) > form > input.btn'.format(r))
+            By.CSS_SELECTOR, 'body > section > article > section > ul\
+                                   > li:nth-child({0}) > form > input.btn'.format(r))
         elem.click()
         print('    clicked {0} item for Second word'.format(numToOridnal(r)))
         print('End of pekutan')
@@ -127,8 +134,9 @@ def clickPekutan(driver, wait):
         print('Cannot find element: {0}'.format(err))
     except TimeoutException as err:
         print('Cannot find element, then timeout in waiting: {0}'.format(err))
-    except:
-        print('Error in pekutan')
+    except Exception as err:
+        print("ERROR in [pekutan]: ", sys.exc_info())
+
     return True
 
 
@@ -153,8 +161,9 @@ def clickSeal(driver, wait):
         print('Cannot find element: {0}'.format(err))
     except TimeoutException as err:
         print('Cannot find element, then timeout in waiting: {0}'.format(err))
-    except:
-        print('Error in seal')
+    except Exception as err:
+        print("ERRO in [seal]: ", sys.exc_info())
+
     return True
 
 
@@ -191,8 +200,8 @@ def hintCheck(words):
             end["url"] = mapping[result[0][0]]
             end["point"] = result[0][1]
         print(end)
-    except:
-        print("ERROR in word mappings: ", sys.exc_info())
+    except Exception as err:
+        print("ERROR in [word mappings]: ", sys.exc_info())
 
     return end
 
@@ -290,13 +299,15 @@ def clickLookingforSeal(driver, wait):
         else:
             print('    Not found')
 
+        print('End of looking for seal')
+
     except NoSuchElementException as err:
         print('Cannot find element: {0}'.format(err))
     except TimeoutException as err:
         print('Cannot find element, then timeout in waiting: {0}'.format(err))
-    except:
-        print('Error in looking for seal')
-    print('End of looking for seal')
+    except Exception as err:
+        print("ERROR in [looking for seal]: ", sys.exc_info())
+
     return True
 
 
@@ -310,9 +321,11 @@ def clickAnswer(driver, wait):
         r = random.randint(1, 2)
 
         wait.until(EC.visibility_of_element_located(
-            (By.CSS_SELECTOR, 'body > section > article > section > ul > li:nth-child({0}) > form'.format(r))))
+            (By.CSS_SELECTOR, 'body > section > article > section > ul\
+                                    > li:nth-child({0}) > form'.format(r))))
         elem = driver.find_element(
-            By.CSS_SELECTOR, 'body > section > article > section > ul > li:nth-child({0}) > form'.format(r))
+            By.CSS_SELECTOR, 'body > section > article > section > ul\
+                                   > li:nth-child({0}) > form'.format(r))
         elem.click()
         print('    clicked {0} answer in "answer page"'.format(
             numToOridnal(r)))
@@ -323,8 +336,9 @@ def clickAnswer(driver, wait):
         print('Cannot find element: {0}'.format(err))
     except TimeoutException as err:
         print('Cannot find element, then timeout in waiting: {0}'.format(err))
-    except:
-        print('Error in answer')
+    except Exception as err:
+        print("ERROR in [answer]: ", sys.exc_info())
+
     return True
 
 
@@ -349,8 +363,9 @@ def clickChirashi(driver, wait):
         print('Cannot find element: {0}'.format(err))
     except TimeoutException as err:
         print('Cannot find element, then timeout in waiting: {0}'.format(err))
-    except:
-        print('Error in chirashi')
+    except Exception as err:
+        print("ERROR in [chirashi]: ", sys.exc_info())
+
     return True
 
 
@@ -386,8 +401,9 @@ def clickNews(driver, wait):
         except TimeoutException as err:
             print('Cannot find element in {0} news, then timeout in waiting: {1}'.format(
                 numToOridnal(i), err))
-        except:
-            print('Error in news')
+        except Exception as err:
+            print("ERROR in [news]: ", sys.exc_info())
+
     print('End of news')
     return True
 
@@ -400,8 +416,8 @@ def main():
     with open('pex_data.json', 'r') as f:
         obj = json.load(f)
 
-    #ffprofile = webdriver.FirefoxProfile('Usserprofile/1nmlgd65.default')
-    #driver = webdriver.Firefox(firefox_profile=ffprofile)
+    # ffprofile = webdriver.FirefoxProfile('Usserprofile/1nmlgd65.default')
+    # driver = webdriver.Firefox(firefox_profile=ffprofile)
     driver = webdriver.Firefox()
     driver.implicitly_wait(1)
     wait = WebDriverWait(driver, 8)
@@ -435,9 +451,10 @@ def main():
         #     time.sleep(15 + random.randint(0, 5))
         print("< Waiting for next trial >")
         width = 40
-        for j in range(width+1):
+        for j in range(width + 1):
             progress = 1.0 * j / width
-            print('\r', get_progressbar_str(width, progress), end='', flush='ture')
+            print('\r', get_progressbar_str(
+                width, progress), end='', flush='ture')
             time.sleep(random.randint(8, 10))
         print(" ")
 
