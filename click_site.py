@@ -108,8 +108,9 @@ def main():
         proc = Popen(shlex.split(cmd))
         # check_call(
         #     ["C:/Program Files (x86)/Mozilla Firefox/firefox.exe", " http://hapitas.jp/"])
-    except CalledProcessError as err:
-        pass
+    except Exception as err:
+        print("ERROR in '", cmd, "' : ", sys.exc_info())
+        
     print('ENDENDEND')
     time.sleep(5)
 
