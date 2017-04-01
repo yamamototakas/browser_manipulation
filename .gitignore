@@ -92,3 +92,5 @@ ENV/
 *.json
 keywordlist.dat
 *.pkl
+exe.bat
+tests/
