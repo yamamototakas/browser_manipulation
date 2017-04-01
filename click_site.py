@@ -3,6 +3,7 @@
 import random
 import re
 import sys
+import shlex
 import time
 from subprocess import Popen
 
@@ -10,12 +11,11 @@ import browser_cookie3
 import requests
 
 HEADERS = {"Connection": "keep-alive",
-           "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-           "User-Agent": "Mozilla/5.0 (Windows NT 6.0) AppleWebKit/535.2 (KHTML, like Gecko) \
-                          Chrome/15.0.874.120 Safari/535.2",
+           "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0",
            "Referer": "http://hapitas.jp/",
-           "Accept-Encoding": "gzip,deflate,sdch",
-           "Accept-Language": "ja,en-US;q=0.8,en;q=0.6"
+           "Accept-Encoding": "gzip,deflate",
+           "Accept-Language": "ja,en-US,en;q=0.5"
            }
 
 URL_LIST = (
@@ -110,7 +110,7 @@ def main():
         #     ["C:/Program Files (x86)/Mozilla Firefox/firefox.exe", " http://hapitas.jp/"])
     except Exception as err:
         print("ERROR in '", cmd, "' : ", sys.exc_info())
-        
+
     print('ENDENDEND')
     time.sleep(5)
 
