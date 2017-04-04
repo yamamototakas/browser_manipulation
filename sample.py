@@ -63,7 +63,6 @@ def searchWord(driver, wait, keyword):
         print('Cannot find element, then timeout in waiting: {0}'.format(err))
     except Exception as err:
         print('Eception: {0}'.format(err))
-    except Exception as err:
         print("ERROR in [serach]: ", sys.exc_info())
 
     return True
@@ -416,7 +415,7 @@ def main():
     with open('pex_data.json', 'r') as f:
         obj = json.load(f)
 
-    # ffprofile = webdriver.FirefoxProfile('Usserprofile/1nmlgd65.default')
+    # ffprofile = webdriver.FirefoxProfile('Usserprofile/cs7gcgme.pex_click')
     # driver = webdriver.Firefox(firefox_profile=ffprofile)
     driver = webdriver.Firefox()
     driver.implicitly_wait(1)
@@ -449,12 +448,11 @@ def main():
         # for j in range(20):
         #     print('*', end='', flush='ture')
         #     time.sleep(15 + random.randint(0, 5))
-        print("< Waiting for next trial >")
+        print("< Waiting for next trial ({0}/{1})>".format(i+1, key_num))
         width = 40
         for j in range(width + 1):
             progress = 1.0 * j / width
-            print('\r', get_progressbar_str(
-                width, progress), end='', flush='ture')
+            print('\r', get_progressbar_str(width, progress), end='', flush='ture')
             time.sleep(random.randint(8, 10))
         print(" ")
 
