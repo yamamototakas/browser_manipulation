@@ -415,7 +415,7 @@ def main():
     with open('pex_data.json', 'r') as f:
         obj = json.load(f)
 
-    ffprofile = webdriver.FirefoxProfile('C:\selenium')
+    ffprofile = webdriver.FirefoxProfile('C:/selenium')
     driver = webdriver.Firefox(firefox_profile=ffprofile)
     # driver = webdriver.Firefox()
     driver.implicitly_wait(1)
