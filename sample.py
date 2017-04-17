@@ -241,7 +241,7 @@ def clickLookingforSeal(driver, wait):
         for i in range(1, page + 1):
             currentPage = str(i)
             currentUrl = info['url'] + '?page=' + \
-                currentPage + '&sort=point_desc'
+                         currentPage + '&sort=point_desc'
             driver.get(currentUrl)
             print("        {0} page for searching".format(numToOridnal(i)))
 
@@ -415,7 +415,7 @@ def main():
     with open('pex_data.json', 'r') as f:
         obj = json.load(f)
 
-    ffprofile = webdriver.FirefoxProfile('C:/selenium')
+    ffprofile = webdriver.FirefoxProfile('C:/selenium/')
     driver = webdriver.Firefox(firefox_profile=ffprofile)
     # driver = webdriver.Firefox()
     driver.implicitly_wait(1)
@@ -464,7 +464,6 @@ def main():
             pass
 
     print("End of Script")
-
 
 
 if __name__ == '__main__':

@@ -104,7 +104,7 @@ def main():
                 time.sleep(random.randint(1, 2) + random.randint(0, 1))
 
     try:
-        cmd = "C:/Program Files (x86)/Mozilla Firefox/firefox.exe http://hapitas.jp/"
+        cmd = "C:/Program Files (x86)/Mozilla Firefox/firefox.exe -P 'selenium' http://hapitas.jp/"
         proc = Popen(shlex.split(cmd))
         # check_call(
         #     ["C:/Program Files (x86)/Mozilla Firefox/firefox.exe", " http://hapitas.jp/"])
