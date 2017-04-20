@@ -70,6 +70,8 @@ def main():
             pattern2 = re.compile(key2)
             result2 = pattern2.findall(page2)
             print(result2)
+            # sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8') # Here
+            # print(page2
 
             if result2:
                 temp_url = 'http://hapitas.jp/' + result2[0][0] + result2[0][1]
@@ -97,9 +99,9 @@ def main():
             except Exception as err:
                 print("--------------------------------------------")
                 print(" Error happens in sending GET to the following page")
-                print("URL = ", each)
+                print(" URL = ", each)
                 print("--------------------------------------------")
-                print("ERROR : ", sys.exc_info())
+                print(" ERROR : ", sys.exc_info())
                 # print traceback.format_exc(sys.exc_info()[2])
             finally:
                 time.sleep(random.randint(1, 2) + random.randint(0, 1))
