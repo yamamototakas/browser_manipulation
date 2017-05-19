@@ -94,3 +94,4 @@ keywordlist.dat
 *.pkl
 exe.bat
 tests/
+geckodriver.exe_*
