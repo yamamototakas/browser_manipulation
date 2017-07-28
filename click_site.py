@@ -10,18 +10,19 @@ from subprocess import Popen
 import browser_cookie3
 import requests
 
-HEADERS = {"Connection": "keep-alive",
-           "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0",
-           "Referer": "http://hapitas.jp/",
-           "Accept-Encoding": "gzip,deflate",
-           "Accept-Language": "ja,en-US,en;q=0.5"
-           }
+HEADERS = {
+    "Connection": "keep-alive",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0",
+    "Referer": "http://hapitas.jp/",
+    "Accept-Encoding": "gzip,deflate",
+    "Accept-Language": "ja,en-US,en;q=0.5"
+    }
 
 URL_LIST = (
     'http://hapitas.jp/index/ajaxclickget',
     # 'http://goolge.com',
-)
+    )
 
 
 def get_title(html):
