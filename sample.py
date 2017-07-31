@@ -306,6 +306,7 @@ def clickLookingforSeal(driver, wait):
         print('Cannot find element, then timeout in waiting: {0}'.format(err))
     except Exception as err:
         print("ERROR in [looking for seal]: ", sys.exc_info())
+        print(err)
 
     return True
 
