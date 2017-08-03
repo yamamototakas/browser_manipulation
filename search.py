@@ -24,7 +24,7 @@ from subprocess import Popen
 if __name__ == '__main__':
 
     keyword_list = []
-    f = codecs.open("keywordlist3.dat", 'r', 'utf-8')
+    f = codecs.open("keywordlist.dat", 'r', 'utf-8')
     # f=open('keywordlist3.dat','r')
     lines = f.readlines()
     f.close()

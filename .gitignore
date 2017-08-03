@@ -90,7 +90,7 @@ ENV/
 
 # Data
 *.json
-keywordlist.dat
+keywordlist.dat*
 *.pkl
 exe.bat
 tests/
