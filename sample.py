@@ -11,6 +11,8 @@ import socket
 import sys
 import time
 import urllib
+import pdb
+import traceback
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
@@ -211,6 +213,8 @@ def clickLookingforSeal(driver, wait):
         driver.get('http://pex.jp/seal/mitsukete')
         print('    moved to "Looking for seal page"')
 
+        # pdb.set_trace()
+
         time.sleep(4)
         wait.until(EC.visibility_of_element_located(
             (By.CLASS_NAME, 'h-lv2')))
@@ -306,7 +310,9 @@ def clickLookingforSeal(driver, wait):
         print('Cannot find element, then timeout in waiting: {0}'.format(err))
     except Exception as err:
         print("ERROR in [looking for seal]: ", sys.exc_info())
-        print(err)
+        print("-"*60)
+        traceback.print_exc(file=sys.stdout)
+        print("-"*60)
 
     return True
 
@@ -460,6 +466,53 @@ def main():
         searchWord(driver, wait, keyword_list[i])
         if(i <= 6):
             clickPekutan(driver, wait)
+            clickLookingforSeal(driver, wait)
+        else:
+            pass
+
+    print("End of Script")
+    return
+
+
+def main2():
+    key_num = 6
+    keyword_list = getKeyword(key_num)
+    print(keyword_list)
+
+    with open('pex_data.json', 'r') as f:
+        obj = json.load(f)
+
+    driver = webdriver.Firefox()
+    driver.implicitly_wait(1)
+    wait = WebDriverWait(driver, 8)
+
+    url = 'https://pex.jp/login'
+    driver.get(url)
+
+    if(driver.current_url == url):
+        print("Not logged in")
+        elem = driver.find_element(By.NAME, 'pex_user_login[email]')
+        elem.send_keys(obj['Credential'][0]['Email'])
+        elem = driver.find_element(By.NAME, 'pex_user_login[password]')
+        elem.send_keys(obj['Credential'][0]['Password'] + Keys.RETURN)
+        time.sleep(5)
+    else:
+        print("Successfully logged in automatically")
+
+    searchWord(driver, wait, keyword_list[0])
+    clickLookingforSeal(driver, wait)
+
+    for i in range(1, key_num):
+        print("< Waiting for next trial ({0}/{1})>".format(i+1, key_num))
+        width = 40
+        for j in range(width + 1):
+            progress = 1.0 * j / width
+            print('\r', get_progressbar_str(width, progress), end='', flush='ture')
+            time.sleep(random.randint(8, 10))
+        print(" ")
+
+        searchWord(driver, wait, keyword_list[i])
+        if(i <= 6):
             clickLookingforSeal(driver, wait)
         else:
             pass
