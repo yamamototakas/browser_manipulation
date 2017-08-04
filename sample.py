@@ -19,6 +19,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.action_chains import ActionChains
 
 
 def getKeyword(num):
@@ -271,11 +272,12 @@ def clickLookingforSeal(driver, wait):
                 if (hiyoko):
                     isFound = True
                     hiyoko[0].click()
-                    time.sleep(3)
+                    time.sleep(6)
 
                     wait.until(
                         EC.visibility_of_element_located((By.ID, 'find')))
                     hiyoko = driver.find_element(By.ID, 'find')
+                    # ActionChains(driver).move_to_element(hiyoko).click(hiyoko)
                     hiyoko.click()
                     time.sleep(3)
 
