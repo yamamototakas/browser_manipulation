@@ -237,7 +237,10 @@ def clickLookingforSeal(driver, wait):
         wait.until(EC.visibility_of_element_located(
             (By.CLASS_NAME, 'text_area')))
         max_text = driver.find_element(By.CLASS_NAME, 'number').text
-        max_num = re.findall('[0-9]+', max_text)[0]
+        if(re.findall('[0-9]+', max_text)):
+            max_num = re.findall('[0-9]+', max_text)[0]
+        else:
+            max_num = 1
         page = int(max_num) // 20 + 1
         print('    # of pages:', page, ', # of items:', max_num)
         isFound = False
@@ -312,9 +315,9 @@ def clickLookingforSeal(driver, wait):
         print('Cannot find element, then timeout in waiting: {0}'.format(err))
     except Exception as err:
         print("ERROR in [looking for seal]: ", sys.exc_info())
-        print("-"*60)
+        print("-" * 60)
         traceback.print_exc(file=sys.stdout)
-        print("-"*60)
+        print("-" * 60)
 
     return True
 
@@ -457,7 +460,7 @@ def main():
         # for j in range(20):
         #     print('*', end='', flush='ture')
         #     time.sleep(15 + random.randint(0, 5))
-        print("< Waiting for next trial ({0}/{1})>".format(i+1, key_num))
+        print("< Waiting for next trial ({0}/{1})>".format(i + 1, key_num))
         width = 40
         for j in range(width + 1):
             progress = 1.0 * j / width
@@ -505,7 +508,7 @@ def main2():
     clickLookingforSeal(driver, wait)
 
     for i in range(1, key_num):
-        print("< Waiting for next trial ({0}/{1})>".format(i+1, key_num))
+        print("< Waiting for next trial ({0}/{1})>".format(i + 1, key_num))
         width = 40
         for j in range(width + 1):
             progress = 1.0 * j / width
