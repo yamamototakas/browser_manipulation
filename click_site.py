@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
-
+import browser_cookie3
 import random
 import re
+import requests
 import sys
 import shlex
 import time
 from subprocess import Popen
 
-import browser_cookie3
-import requests
 
 HEADERS = {
     "Connection": "keep-alive",
@@ -17,7 +16,8 @@ HEADERS = {
     "Referer": "http://hapitas.jp/",
     "Accept-Encoding": "gzip,deflate",
     "Accept-Language": "ja,en-US,en;q=0.5"
-    }
+}
+
 
 URL_LIST = (
     'http://hapitas.jp/index/ajaxclickget',
@@ -31,12 +31,19 @@ def get_title(html):
 
 def main():
     print(URL_LIST)
+    base_url = 'http://hapitas.jp/'
 
     req_session = requests.session()
     # cj = browser_cookie3.load()
     cj = browser_cookie3.firefox()
     # cj = browser_cookie3.chrome()
     # print (cj)
+
+    check = req_session.get(base_url, headers=HEADERS, cookies=cj).text
+    if '会員ログイン' in check:
+        print("Please login from the browser")
+        print(check.find('会員ログイン'))
+        return 1
 
     for each_url in URL_LIST:
         print(each_url)
@@ -51,7 +58,7 @@ def main():
         print("1st result", result)
 
         for each in result:
-            url_list.append('http://hapitas.jp/' + each)
+            url_list.append(base_url + each)
         url_list = list(set(url_list))
         print(url_list)
 
@@ -70,9 +77,11 @@ def main():
             pattern2 = re.compile(key2)
             result2 = pattern2.findall(page2)
             print(result2)
+            # sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8') # Here
+            # print(page2
 
             if result2:
-                temp_url = 'http://hapitas.jp/' + result2[0][0] + result2[0][1]
+                temp_url = base_url + result2[0][0] + result2[0][1]
 
                 if result2[0][0] == 'condition/':
                     page3 = req_session.get(
@@ -83,7 +92,7 @@ def main():
                     result3 = pattern3.findall(page3)
 
                     if result3:
-                        temp_url = 'http://hapitas.jp/' + result3[0][0] + result3[0][1]
+                        temp_url = base_url + result3[0][0] + result3[0][1]
 
                 url2.append(temp_url)
 
@@ -97,15 +106,15 @@ def main():
             except Exception as err:
                 print("--------------------------------------------")
                 print(" Error happens in sending GET to the following page")
-                print("URL = ", each)
+                print(" URL = ", each)
                 print("--------------------------------------------")
-                print("ERROR : ", sys.exc_info())
+                print(" ERROR : ", sys.exc_info())
                 # print traceback.format_exc(sys.exc_info()[2])
             finally:
                 time.sleep(random.randint(1, 2) + random.randint(0, 1))
 
     try:
-        cmd = "C:/Program Files (x86)/Mozilla Firefox/firefox.exe http://hapitas.jp/"
+        cmd = "C:/Program Files (x86)/Mozilla Firefox/firefox.exe -P 'selenium' " + base_url
         proc = Popen(shlex.split(cmd))
         # check_call(
         #     ["C:/Program Files (x86)/Mozilla Firefox/firefox.exe", " http://hapitas.jp/"])
@@ -114,6 +123,7 @@ def main():
 
     print('ENDENDEND')
     time.sleep(5)
+    return 0
 
 
 if __name__ == '__main__':
