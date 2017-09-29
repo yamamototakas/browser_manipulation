@@ -95,3 +95,6 @@ keywordlist.dat*
 exe.bat
 tests/
 geckodriver.exe_*
+
+# local shell
+jp_proxy.sh
