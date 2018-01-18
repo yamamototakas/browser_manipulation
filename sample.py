@@ -180,7 +180,7 @@ def hintCheck(words):
         "相談": "http://pex.jp/point_actions/list/consultation",
         "ゲーム起動": "http://pex.jp/point_actions/list/start_up_game",
         "会員登録後のアクション": "http://pex.jp/point_actions/list/register_and_action",
-        "中古買取": "http://pex.jp/point_actions/list/used_item_purchase",
+        "中古買取り": "http://pex.jp/point_actions/list/used_item_purchase",
         "無料その他": "http://pex.jp/point_actions/list/free_point_action_other",
         "有料会員登録": "http://pex.jp/point_actions/list/charge_register",
         "旅行": "http://pex.jp/point_actions/list/travel",

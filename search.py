@@ -32,7 +32,9 @@ if __name__ == '__main__':
     for i in range(33):
         r = random.randint(0, len(lines) - 1)
         keyword_list.append(lines[r].rstrip("\r\n"))
-    print(keyword_list, "Waiting before start")
+    print(keyword_list)
+    print("Waiting before start")
+
     url = 'http://websearch.rakuten.co.jp/Web?col=OW&svx=101102&ref=chexti_r&qt=' \
         + urllib.parse.quote_plus("First", encoding="utf-8")
 
@@ -59,7 +61,7 @@ if __name__ == '__main__':
 
         # check_call(["C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
         #             " --disable-images", url])
-        time.sleep(random.randint(5, 8) + random.randint(4, 8))
+        time.sleep(random.randint(5, 8) + random.randint(5, 8))
 
     # time.sleep(2)
 
