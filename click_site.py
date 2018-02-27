@@ -6,6 +6,8 @@ import requests
 import sys
 import shlex
 import time
+import socket
+import ipaddress
 from subprocess import Popen
 
 
@@ -22,8 +24,11 @@ HEADERS = {
 URL_LIST = (
     'http://hapitas.jp/index/ajaxclickget',
     # 'http://goolge.com',
-    )
+)
 
+
+proxies = {
+}
 
 def get_title(html):
     return re.findall('<title>(.*?)</title>', html, flags=re.DOTALL)[0].strip()
@@ -38,8 +43,19 @@ def main():
     cj = browser_cookie3.firefox()
     # cj = browser_cookie3.chrome()
     # print (cj)
+    ip = ipaddress.ip_address(socket.gethostbyname(socket.gethostname()))
+    nw = ipaddress.ip_network('10.0.0.0/8')
+    print("IP address: ", ip)
+    if(ip in nw):
+        proxies = {
+            'http': 'http://10.254.254.180:3128',
+            'https': 'http://10.254.254.7:3128'
+        }
+    print("proxy: ", proxies)
 
-    check = req_session.get(base_url, headers=HEADERS, cookies=cj).text
+    # check = req_session.get(base_url, headers=HEADERS, cookies=cj).text
+    check = req_session.get(base_url, proxies=proxies, headers=HEADERS, cookies=cj).text
+
     if '会員ログイン' in check:
         print("Please login from the browser")
         print(check.find('会員ログイン'))
@@ -48,7 +64,8 @@ def main():
     for each_url in URL_LIST:
         print(each_url)
 
-        page = req_session.get(each_url, headers=HEADERS, cookies=cj).text
+        # page = req_session.get(each_url, headers=HEADERS, cookies=cj).text
+        page = req_session.get(each_url, proxies=proxies, headers=HEADERS, cookies=cj).text
 
         url_list = []
         url2 = []
@@ -63,7 +80,8 @@ def main():
         print(url_list)
 
         for each in url_list:
-            page2 = req_session.get(each, headers=HEADERS, cookies=cj).text
+            # page2 = req_session.get(each, headers=HEADERS, cookies=cj).text
+            page2 = req_session.get(each, proxies=proxies, headers=HEADERS, cookies=cj).text
 
             print("serch for each url=", each)
             # http://hapitas.jp/condition/index/item_id/60551/apn/top_clickget/click_get/1635/fixed_point/2300/up_point/5000/point_type/0/zero_point_flg/0
@@ -84,8 +102,8 @@ def main():
                 temp_url = base_url + result2[0][0] + result2[0][1]
 
                 if result2[0][0] == 'condition/':
-                    page3 = req_session.get(
-                        temp_url, headers=HEADERS, cookies=cj).text
+                    # page3 = req_session.get(temp_url, headers=HEADERS, cookies=cj).text
+                    page3 = req_session.get(temp_url, proxies=proxies, headers=HEADERS, cookies=cj).text
 
                     payloadkey3 = '(item\/)(.+top_clickget.*)("\sclass)'
                     pattern3 = re.compile(payloadkey3)
@@ -102,7 +120,8 @@ def main():
         for each in url2:
             print("url =", each)
             try:
-                page4 = req_session.get(each, headers=HEADERS, cookies=cj)
+                # page4 = req_session.get(each, headers=HEADERS, cookies=cj)
+                page4 = req_session.get(each, proxies=proxies, headers=HEADERS, cookies=cj)
             except Exception as err:
                 print("--------------------------------------------")
                 print(" Error happens in sending GET to the following page")
