@@ -30,6 +30,7 @@ URL_LIST = (
 proxies = {
 }
 
+
 def get_title(html):
     return re.findall('<title>(.*?)</title>', html, flags=re.DOTALL)[0].strip()
 
@@ -44,7 +45,7 @@ def main():
     # cj = browser_cookie3.chrome()
     # print (cj)
     ip = ipaddress.ip_address(socket.gethostbyname(socket.gethostname()))
-    nw = ipaddress.ip_network('10.0.0.0/8')
+    nw = ipaddress.ip_network('10.41.192.0/18')
     print("IP address: ", ip)
     if(ip in nw):
         proxies = {
