@@ -43,7 +43,7 @@ if __name__ == '__main__':
         proc = Popen(shlex.split(cmd))
     except Exception as err:
         print("ERROR in '", cmd, "' : ", sys.exc_info())
-    time.sleep(10)
+    time.sleep(15)
 
     for each in keyword_list:
         print(each)
@@ -61,7 +61,7 @@ if __name__ == '__main__':
 
         # check_call(["C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
         #             " --disable-images", url])
-        time.sleep(random.randint(5, 8) + random.randint(5, 8))
+        time.sleep(random.randint(6, 9) + random.randint(6, 9))
 
     # time.sleep(2)
 
