@@ -47,12 +47,14 @@ def main():
     ip = ipaddress.ip_address(socket.gethostbyname(socket.gethostname()))
     nw = ipaddress.ip_network('10.41.192.0/18')
     print("IP address: ", ip)
+    proxies = {}
     if(ip in nw):
         proxies = {
             'http': 'http://10.254.254.180:3128',
             'https': 'http://10.254.254.7:3128'
         }
     print("proxy: ", proxies)
+
 
     # check = req_session.get(base_url, headers=HEADERS, cookies=cj).text
     check = req_session.get(base_url, proxies=proxies, headers=HEADERS, cookies=cj).text
