@@ -29,7 +29,7 @@ if __name__ == '__main__':
     lines = f.readlines()
     f.close()
     print("EndOfFileClose")
-    for i in range(33):
+    for i in range(38):
         r = random.randint(0, len(lines) - 1)
         keyword_list.append(lines[r].rstrip("\r\n"))
     print(keyword_list)
